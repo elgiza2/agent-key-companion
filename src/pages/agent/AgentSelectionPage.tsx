@@ -230,16 +230,6 @@ export default function AgentSelectionPage() {
             );
           })}
         </GlassSection>
-
-        <GlassSection title="Always-on teams">
-          <GlassCard className="gx-card-pad">
-            <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary"><Users size={20} /></span>
-              <div className="min-w-0 flex-1"><strong>Team Workspace</strong><p className="mt-1 text-sm text-muted-foreground">A separate paid workspace for long-running teams and 24/7 tasks.</p></div>
-              <Link to="/team" className="gx-pill inline-flex items-center gap-1">Open <ChevronRight size={15} /></Link>
-            </div>
-          </GlassCard>
-        </GlassSection>
       </ProfileGlassShell>
     </div>
   );
