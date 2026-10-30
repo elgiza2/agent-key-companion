@@ -10,33 +10,300 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as ApiAnythingRouteImport } from './routes/api/anything'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiClerkRouteImport } from './routes/api/clerk'
+import { Route as ApiDeepResearchRouteImport } from './routes/api/deep-research'
+import { Route as ApiDodoCheckoutRouteImport } from './routes/api/dodo-checkout'
+import { Route as ApiLongRunRouteImport } from './routes/api/long-run'
+import { Route as ApiMcpRouteImport } from './routes/api/mcp'
+import { Route as ApiReadUrlRouteImport } from './routes/api/read-url'
+import { Route as ApiRenderPdfRouteImport } from './routes/api/render-pdf'
+import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
+import { Route as ApiWebSearchRouteImport } from './routes/api/web-search'
+import { Route as ApiAgentSplatRouteImport } from './routes/api/agent.$'
+import { Route as ApiPublicFxRouteImport } from './routes/api/public/fx'
+import { Route as ApiPublicGeoRouteImport } from './routes/api/public/geo'
+import { Route as ApiPublicRemindersTickRouteImport } from './routes/api/public/reminders-tick'
+import { Route as ApiPublicTelegramKeysRouteImport } from './routes/api/public/telegram-keys'
+import { Route as ApiPublicAgentToolsTokenRouteImport } from './routes/api/public/agent-tools.$token'
+import { Route as ApiPublicMediaStatusRunIdRouteImport } from './routes/api/public/media-status.$runId'
+import { Route as ApiPublicMediaRunIdIndexRouteImport } from './routes/api/public/media.$runId.$index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAnythingRoute = ApiAnythingRouteImport.update({
+  id: '/api/anything',
+  path: '/api/anything',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiClerkRoute = ApiClerkRouteImport.update({
+  id: '/api/clerk',
+  path: '/api/clerk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDeepResearchRoute = ApiDeepResearchRouteImport.update({
+  id: '/api/deep-research',
+  path: '/api/deep-research',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDodoCheckoutRoute = ApiDodoCheckoutRouteImport.update({
+  id: '/api/dodo-checkout',
+  path: '/api/dodo-checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLongRunRoute = ApiLongRunRouteImport.update({
+  id: '/api/long-run',
+  path: '/api/long-run',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMcpRoute = ApiMcpRouteImport.update({
+  id: '/api/mcp',
+  path: '/api/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReadUrlRoute = ApiReadUrlRouteImport.update({
+  id: '/api/read-url',
+  path: '/api/read-url',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRenderPdfRoute = ApiRenderPdfRouteImport.update({
+  id: '/api/render-pdf',
+  path: '/api/render-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
+  id: '/api/transcribe',
+  path: '/api/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWebSearchRoute = ApiWebSearchRouteImport.update({
+  id: '/api/web-search',
+  path: '/api/web-search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentSplatRoute = ApiAgentSplatRouteImport.update({
+  id: '/api/agent/$',
+  path: '/api/agent/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicFxRoute = ApiPublicFxRouteImport.update({
+  id: '/api/public/fx',
+  path: '/api/public/fx',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicGeoRoute = ApiPublicGeoRouteImport.update({
+  id: '/api/public/geo',
+  path: '/api/public/geo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRemindersTickRoute = ApiPublicRemindersTickRouteImport.update({
+  id: '/api/public/reminders-tick',
+  path: '/api/public/reminders-tick',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTelegramKeysRoute = ApiPublicTelegramKeysRouteImport.update({
+  id: '/api/public/telegram-keys',
+  path: '/api/public/telegram-keys',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicAgentToolsTokenRoute =
+  ApiPublicAgentToolsTokenRouteImport.update({
+    id: '/api/public/agent-tools/$token',
+    path: '/api/public/agent-tools/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicMediaStatusRunIdRoute =
+  ApiPublicMediaStatusRunIdRouteImport.update({
+    id: '/api/public/media-status/$runId',
+    path: '/api/public/media-status/$runId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicMediaRunIdIndexRoute =
+  ApiPublicMediaRunIdIndexRouteImport.update({
+    id: '/api/public/media/$runId/$index',
+    path: '/api/public/media/$runId/$index',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/api/anything': typeof ApiAnythingRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/clerk': typeof ApiClerkRoute
+  '/api/deep-research': typeof ApiDeepResearchRoute
+  '/api/dodo-checkout': typeof ApiDodoCheckoutRoute
+  '/api/long-run': typeof ApiLongRunRoute
+  '/api/mcp': typeof ApiMcpRoute
+  '/api/read-url': typeof ApiReadUrlRoute
+  '/api/render-pdf': typeof ApiRenderPdfRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
+  '/api/web-search': typeof ApiWebSearchRoute
+  '/api/agent/$': typeof ApiAgentSplatRoute
+  '/api/public/fx': typeof ApiPublicFxRoute
+  '/api/public/geo': typeof ApiPublicGeoRoute
+  '/api/public/reminders-tick': typeof ApiPublicRemindersTickRoute
+  '/api/public/telegram-keys': typeof ApiPublicTelegramKeysRoute
+  '/api/public/agent-tools/$token': typeof ApiPublicAgentToolsTokenRoute
+  '/api/public/media-status/$runId': typeof ApiPublicMediaStatusRunIdRoute
+  '/api/public/media/$runId/$index': typeof ApiPublicMediaRunIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/api/anything': typeof ApiAnythingRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/clerk': typeof ApiClerkRoute
+  '/api/deep-research': typeof ApiDeepResearchRoute
+  '/api/dodo-checkout': typeof ApiDodoCheckoutRoute
+  '/api/long-run': typeof ApiLongRunRoute
+  '/api/mcp': typeof ApiMcpRoute
+  '/api/read-url': typeof ApiReadUrlRoute
+  '/api/render-pdf': typeof ApiRenderPdfRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
+  '/api/web-search': typeof ApiWebSearchRoute
+  '/api/agent/$': typeof ApiAgentSplatRoute
+  '/api/public/fx': typeof ApiPublicFxRoute
+  '/api/public/geo': typeof ApiPublicGeoRoute
+  '/api/public/reminders-tick': typeof ApiPublicRemindersTickRoute
+  '/api/public/telegram-keys': typeof ApiPublicTelegramKeysRoute
+  '/api/public/agent-tools/$token': typeof ApiPublicAgentToolsTokenRoute
+  '/api/public/media-status/$runId': typeof ApiPublicMediaStatusRunIdRoute
+  '/api/public/media/$runId/$index': typeof ApiPublicMediaRunIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/api/anything': typeof ApiAnythingRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/clerk': typeof ApiClerkRoute
+  '/api/deep-research': typeof ApiDeepResearchRoute
+  '/api/dodo-checkout': typeof ApiDodoCheckoutRoute
+  '/api/long-run': typeof ApiLongRunRoute
+  '/api/mcp': typeof ApiMcpRoute
+  '/api/read-url': typeof ApiReadUrlRoute
+  '/api/render-pdf': typeof ApiRenderPdfRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
+  '/api/web-search': typeof ApiWebSearchRoute
+  '/api/agent/$': typeof ApiAgentSplatRoute
+  '/api/public/fx': typeof ApiPublicFxRoute
+  '/api/public/geo': typeof ApiPublicGeoRoute
+  '/api/public/reminders-tick': typeof ApiPublicRemindersTickRoute
+  '/api/public/telegram-keys': typeof ApiPublicTelegramKeysRoute
+  '/api/public/agent-tools/$token': typeof ApiPublicAgentToolsTokenRoute
+  '/api/public/media-status/$runId': typeof ApiPublicMediaStatusRunIdRoute
+  '/api/public/media/$runId/$index': typeof ApiPublicMediaRunIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/$'
+    | '/api/anything'
+    | '/api/chat'
+    | '/api/clerk'
+    | '/api/deep-research'
+    | '/api/dodo-checkout'
+    | '/api/long-run'
+    | '/api/mcp'
+    | '/api/read-url'
+    | '/api/render-pdf'
+    | '/api/transcribe'
+    | '/api/web-search'
+    | '/api/agent/$'
+    | '/api/public/fx'
+    | '/api/public/geo'
+    | '/api/public/reminders-tick'
+    | '/api/public/telegram-keys'
+    | '/api/public/agent-tools/$token'
+    | '/api/public/media-status/$runId'
+    | '/api/public/media/$runId/$index'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/$'
+    | '/api/anything'
+    | '/api/chat'
+    | '/api/clerk'
+    | '/api/deep-research'
+    | '/api/dodo-checkout'
+    | '/api/long-run'
+    | '/api/mcp'
+    | '/api/read-url'
+    | '/api/render-pdf'
+    | '/api/transcribe'
+    | '/api/web-search'
+    | '/api/agent/$'
+    | '/api/public/fx'
+    | '/api/public/geo'
+    | '/api/public/reminders-tick'
+    | '/api/public/telegram-keys'
+    | '/api/public/agent-tools/$token'
+    | '/api/public/media-status/$runId'
+    | '/api/public/media/$runId/$index'
+  id:
+    | '__root__'
+    | '/'
+    | '/$'
+    | '/api/anything'
+    | '/api/chat'
+    | '/api/clerk'
+    | '/api/deep-research'
+    | '/api/dodo-checkout'
+    | '/api/long-run'
+    | '/api/mcp'
+    | '/api/read-url'
+    | '/api/render-pdf'
+    | '/api/transcribe'
+    | '/api/web-search'
+    | '/api/agent/$'
+    | '/api/public/fx'
+    | '/api/public/geo'
+    | '/api/public/reminders-tick'
+    | '/api/public/telegram-keys'
+    | '/api/public/agent-tools/$token'
+    | '/api/public/media-status/$runId'
+    | '/api/public/media/$runId/$index'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
+  ApiAnythingRoute: typeof ApiAnythingRoute
+  ApiChatRoute: typeof ApiChatRoute
+  ApiClerkRoute: typeof ApiClerkRoute
+  ApiDeepResearchRoute: typeof ApiDeepResearchRoute
+  ApiDodoCheckoutRoute: typeof ApiDodoCheckoutRoute
+  ApiLongRunRoute: typeof ApiLongRunRoute
+  ApiMcpRoute: typeof ApiMcpRoute
+  ApiReadUrlRoute: typeof ApiReadUrlRoute
+  ApiRenderPdfRoute: typeof ApiRenderPdfRoute
+  ApiTranscribeRoute: typeof ApiTranscribeRoute
+  ApiWebSearchRoute: typeof ApiWebSearchRoute
+  ApiAgentSplatRoute: typeof ApiAgentSplatRoute
+  ApiPublicFxRoute: typeof ApiPublicFxRoute
+  ApiPublicGeoRoute: typeof ApiPublicGeoRoute
+  ApiPublicRemindersTickRoute: typeof ApiPublicRemindersTickRoute
+  ApiPublicTelegramKeysRoute: typeof ApiPublicTelegramKeysRoute
+  ApiPublicAgentToolsTokenRoute: typeof ApiPublicAgentToolsTokenRoute
+  ApiPublicMediaStatusRunIdRoute: typeof ApiPublicMediaStatusRunIdRoute
+  ApiPublicMediaRunIdIndexRoute: typeof ApiPublicMediaRunIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +315,171 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/anything': {
+      id: '/api/anything'
+      path: '/api/anything'
+      fullPath: '/api/anything'
+      preLoaderRoute: typeof ApiAnythingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/clerk': {
+      id: '/api/clerk'
+      path: '/api/clerk'
+      fullPath: '/api/clerk'
+      preLoaderRoute: typeof ApiClerkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/deep-research': {
+      id: '/api/deep-research'
+      path: '/api/deep-research'
+      fullPath: '/api/deep-research'
+      preLoaderRoute: typeof ApiDeepResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/dodo-checkout': {
+      id: '/api/dodo-checkout'
+      path: '/api/dodo-checkout'
+      fullPath: '/api/dodo-checkout'
+      preLoaderRoute: typeof ApiDodoCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/long-run': {
+      id: '/api/long-run'
+      path: '/api/long-run'
+      fullPath: '/api/long-run'
+      preLoaderRoute: typeof ApiLongRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mcp': {
+      id: '/api/mcp'
+      path: '/api/mcp'
+      fullPath: '/api/mcp'
+      preLoaderRoute: typeof ApiMcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/read-url': {
+      id: '/api/read-url'
+      path: '/api/read-url'
+      fullPath: '/api/read-url'
+      preLoaderRoute: typeof ApiReadUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/render-pdf': {
+      id: '/api/render-pdf'
+      path: '/api/render-pdf'
+      fullPath: '/api/render-pdf'
+      preLoaderRoute: typeof ApiRenderPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/transcribe': {
+      id: '/api/transcribe'
+      path: '/api/transcribe'
+      fullPath: '/api/transcribe'
+      preLoaderRoute: typeof ApiTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/web-search': {
+      id: '/api/web-search'
+      path: '/api/web-search'
+      fullPath: '/api/web-search'
+      preLoaderRoute: typeof ApiWebSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agent/$': {
+      id: '/api/agent/$'
+      path: '/api/agent/$'
+      fullPath: '/api/agent/$'
+      preLoaderRoute: typeof ApiAgentSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/fx': {
+      id: '/api/public/fx'
+      path: '/api/public/fx'
+      fullPath: '/api/public/fx'
+      preLoaderRoute: typeof ApiPublicFxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/geo': {
+      id: '/api/public/geo'
+      path: '/api/public/geo'
+      fullPath: '/api/public/geo'
+      preLoaderRoute: typeof ApiPublicGeoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders-tick': {
+      id: '/api/public/reminders-tick'
+      path: '/api/public/reminders-tick'
+      fullPath: '/api/public/reminders-tick'
+      preLoaderRoute: typeof ApiPublicRemindersTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/telegram-keys': {
+      id: '/api/public/telegram-keys'
+      path: '/api/public/telegram-keys'
+      fullPath: '/api/public/telegram-keys'
+      preLoaderRoute: typeof ApiPublicTelegramKeysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/agent-tools/$token': {
+      id: '/api/public/agent-tools/$token'
+      path: '/api/public/agent-tools/$token'
+      fullPath: '/api/public/agent-tools/$token'
+      preLoaderRoute: typeof ApiPublicAgentToolsTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/media-status/$runId': {
+      id: '/api/public/media-status/$runId'
+      path: '/api/public/media-status/$runId'
+      fullPath: '/api/public/media-status/$runId'
+      preLoaderRoute: typeof ApiPublicMediaStatusRunIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/media/$runId/$index': {
+      id: '/api/public/media/$runId/$index'
+      path: '/api/public/media/$runId/$index'
+      fullPath: '/api/public/media/$runId/$index'
+      preLoaderRoute: typeof ApiPublicMediaRunIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
+  ApiAnythingRoute: ApiAnythingRoute,
+  ApiChatRoute: ApiChatRoute,
+  ApiClerkRoute: ApiClerkRoute,
+  ApiDeepResearchRoute: ApiDeepResearchRoute,
+  ApiDodoCheckoutRoute: ApiDodoCheckoutRoute,
+  ApiLongRunRoute: ApiLongRunRoute,
+  ApiMcpRoute: ApiMcpRoute,
+  ApiReadUrlRoute: ApiReadUrlRoute,
+  ApiRenderPdfRoute: ApiRenderPdfRoute,
+  ApiTranscribeRoute: ApiTranscribeRoute,
+  ApiWebSearchRoute: ApiWebSearchRoute,
+  ApiAgentSplatRoute: ApiAgentSplatRoute,
+  ApiPublicFxRoute: ApiPublicFxRoute,
+  ApiPublicGeoRoute: ApiPublicGeoRoute,
+  ApiPublicRemindersTickRoute: ApiPublicRemindersTickRoute,
+  ApiPublicTelegramKeysRoute: ApiPublicTelegramKeysRoute,
+  ApiPublicAgentToolsTokenRoute: ApiPublicAgentToolsTokenRoute,
+  ApiPublicMediaStatusRunIdRoute: ApiPublicMediaStatusRunIdRoute,
+  ApiPublicMediaRunIdIndexRoute: ApiPublicMediaRunIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
