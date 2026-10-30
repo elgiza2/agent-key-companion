@@ -121,12 +121,13 @@
   box-shadow: none !important;
 }
 
-/* Chat header must be visually indistinguishable from the chat canvas. */
-.mobile-chat-header,
-.mobile-chat-header::before,
-.mobile-chat-header::after {
-  background: hsl(var(--background)) !important;
-  background-color: hsl(var(--background)) !important;
+/* Chat header has no background: messages scroll visibly behind it. Only
+   the sidebar button keeps a small pill so it stays readable. */
+html body .mobile-chat-header,
+html body .mobile-chat-header::before,
+html body .mobile-chat-header::after {
+  background: transparent !important;
+  background-color: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   box-shadow: none !important;
@@ -163,7 +164,7 @@
 
   .chat-composer-dock {
     padding-inline: 1rem !important;
-    background: linear-gradient(to top, hsl(var(--chat-agent-canvas)) 55%, transparent) !important;
+    background: transparent !important;
   }
 
   .chat-composer-frame.chat-composer-liquid {
@@ -273,5 +274,15 @@
 @media (prefers-reduced-motion: reduce) {
   [data-chat-main="true"][data-chat-glow="true"]::after {
     animation: none;
+  }
+}
+
+/* Mobile: only the sidebar toggle gets a small surface behind it. */
+@media (max-width: 767.98px) {
+  html body .mobile-chat-header [data-testid="mobile-open-sidebar"] {
+    background: hsl(var(--background) / 0.78) !important;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 0 0 1px hsl(var(--foreground) / 0.06);
   }
 }

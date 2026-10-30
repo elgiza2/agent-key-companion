@@ -178,8 +178,8 @@ html.light .card {
 /* Chat header blends into the chat canvas — never a white bar. */
 html.light .mobile-chat-header,
 html .mobile-chat-header {
-  background: hsl(var(--background)) !important;
-  background-color: hsl(var(--background)) !important;
+  background: transparent !important;
+  background-color: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
   backdrop-filter: none !important;

@@ -126,3 +126,11 @@
 - [ ] Browserbase key: store and make available to agents
 - [ ] Unified thinking design (agent + fast chat)
 - [ ] Token savings ~90% with high quality
+
+## Oct 30 — import follow-up
+- [x] Mobile chat: transparent top bar (only sidebar button keeps a small pill); composer floats with no backdrop band
+- [ ] Unify thinking design across agents with fast-chat style
+- [ ] 90% token reduction with quality retained
+- [ ] Browserbase agent integration (key must be re-entered securely)
+- [ ] KEY_VAULT_SECRET on the published server — needs secure provisioning on the host
+- [ ] Telegram bot webhook re-registration after deploy
