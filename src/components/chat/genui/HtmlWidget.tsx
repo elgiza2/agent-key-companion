@@ -1,8 +1,8 @@
 /** @doc Renders a model-written ```widget HTML block inside a sandboxed iframe
-import { findPhoto } from "./photoLookup";
  *  (scripts allowed, no same-origin — it cannot touch the app or the session).
  *  A built-in stylesheet gives every widget the same clean look; the widget
  *  calls megsy.send("text") to answer the agent and auto-sizes to its content. */
+import { findPhoto } from "./photoLookup";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { GenUIActionContext } from "./GenUIBlock";
 import { connectFromWidget } from "./connectFromWidget";
