@@ -139,4 +139,4 @@
 - [ ] Browserbase as a regular agent alongside the others
 - [ ] Fix chat image search relevance
 - [ ] Store images/videos on Telegram instead of database storage
-- [ ] Full site audit with test account, report all problems
+- [x] Full site audit with test account (mobile), findings reported to user
