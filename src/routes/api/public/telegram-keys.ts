@@ -54,6 +54,7 @@ const HELP = [
   "/keys_browseruse — مفاتيح Browser Use",
   "/keys_deapi — مفاتيح deAPI",
   "/keys_plusai — مفاتيح Plus AI",
+  "/storage — حفظ الصور والفيديوهات في المحادثة دي (أو <code>/storage -100…</code> لقناة)",
   "/del_cerebras رقم — حذف مفتاح",
   "/on_cerebras رقم — تفعيل مفتاح",
   "(نفس الصيغة لـ agentsky و browseruse و deapi)",
