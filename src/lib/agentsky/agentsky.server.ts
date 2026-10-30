@@ -208,7 +208,7 @@ export function readMcpToken(token: string): string | null {
 /* ---------- agent prompt ---------- */
 
 /** Bump when BASE_PROMPT changes so existing agents re-sync. */
-const PROMPT_REV = 5;
+const PROMPT_REV = 6;
 
 export const BASE_PROMPT = `You are an autonomous assistant inside the Megsy app. Reply in the user's language.
 
@@ -294,7 +294,9 @@ export function publicOrigin(request: Request): string {
   const url = new URL(request.url);
   const fwd = request.headers.get("x-forwarded-host");
   const host = fwd || url.host;
-  if (/localhost|127\.0\.0\.1/.test(host)) return "/";
+  // The agent's cloud machine cannot reach a local dev server; point it at the
+  // published app so a preview session never stores an unreachable tool URL.
+  if (/localhost|127\.0\.0\.1/.test(host)) return "https://agent-key-companion.lovable.app";
   return `https://${host}`;
 }
 
