@@ -131,6 +131,6 @@
 - [x] Mobile chat: transparent top bar (only sidebar button keeps a small pill); composer floats with no backdrop band
 - [x] Agent steps now render with the fast-chat thinking surface
 - [~] Token saving: chat history trimmed client-side (last 10, older long text shortened). Server-side duplicate visual prompt removal blocked: backend functions not editable here
-- [ ] Browserbase agent integration (key must be re-entered securely)
+- [x] Browserbase added to Telegram key bot (validated, stored in service_keys); agent consumer still pending
 - [ ] KEY_VAULT_SECRET on the published server — needs secure provisioning on the host
 - [ ] Telegram bot webhook re-registration after deploy
