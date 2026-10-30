@@ -4,12 +4,10 @@ import { Link } from "react-router-dom";
 import {
   Bot,
   Check,
-  ChevronRight,
   Crown,
   Loader2,
   Plus,
   RotateCw,
-  Users,
   Wrench,
   Search,
   Code2,
