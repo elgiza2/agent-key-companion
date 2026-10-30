@@ -13,7 +13,7 @@ const BASE_CSS = `
 :root{--fg:#0f1115;--muted:#5d6370;--line:rgba(15,17,21,.08);--glass:rgba(255,255,255,.72);--glass2:rgba(255,255,255,.5);--soft:rgba(15,17,21,.045);--hi:rgba(255,255,255,.9);--accent:#2f6bff;--accent2:#7a5cff;--accent-fg:#fff;--good:#12a150;--warn:#e08a00;--bad:#e5484d;--info:#2f6bff;--r:26px;--rs:18px;--sh:0 1px 1px rgba(0,0,0,.03),0 18px 40px -20px rgba(20,30,60,.28)}
 html.dark{--fg:#f4f5f7;--muted:#a1a6b2;--line:rgba(255,255,255,.09);--glass:rgba(34,36,42,.66);--glass2:rgba(255,255,255,.06);--soft:rgba(255,255,255,.06);--hi:rgba(255,255,255,.14);--accent:#5b8cff;--accent2:#9b84ff;--sh:0 1px 1px rgba(0,0,0,.2),0 22px 44px -22px rgba(0,0,0,.7)}
 *{box-sizing:border-box;margin:0}
-html,body{height:auto!important;min-height:0!important;touch-action:manipulation;overscroll-behavior:none;overflow-x:hidden;background:transparent;color:var(--fg);font:14.5px/1.6 -apple-system,BlinkMacSystemFont,"SF Pro Text","HONOR Sans","Segoe UI","IBM Plex Sans Arabic",Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
+html,body{height:auto!important;min-height:0!important;touch-action:manipulation;overflow-x:hidden;background:transparent;color:var(--fg);font:14.5px/1.6 -apple-system,BlinkMacSystemFont,"SF Pro Text","HONOR Sans","Segoe UI","IBM Plex Sans Arabic",Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
 body{padding:4px}
 h1,h2,h3{letter-spacing:-.015em;line-height:1.25;font-weight:700}h1{font-size:24px}h2{font-size:19px}h3{font-size:15.5px}
 p{color:var(--muted)}ul,ol{padding-inline-start:20px}li+li{margin-top:4px}
