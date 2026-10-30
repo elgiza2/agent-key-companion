@@ -148,7 +148,7 @@ const UsagePage = () => {
     (sub?.status === "active" || sub?.status === "trialing") &&
     (!sub?.current_period_end || new Date(sub.current_period_end).getTime() > Date.now());
   const autoRenew = Boolean(sub?.auto_renew) && isActive;
-  const amountLabel = sub?.amount_cents
+  const amountLabel = isActive && sub?.amount_cents
     ? money(sub.amount_cents, sub.currency)
     : `${credits.toLocaleString(locale(lang))} MC`;
 

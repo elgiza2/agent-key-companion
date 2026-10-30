@@ -24,7 +24,7 @@
 - [x] Welcome slide 2 new photo (woman); referral required-steps list removed; jump-to-latest button removed
 - [x] Drawings: photos at natural size, question card (title + clean options), steps/tree restyle, send-button end icon removed, no trailing question lines, bold headings
 - [x] Pink drifting chat background, transparent mobile top bar
-- [ ] Auto-renew: renewal job (kashier-renewals) is not scheduled anywhere — needs a scheduled run + secret
+- [x] Auto-renew: kashier-renewals runs daily via cron (verified)
 - [ ] Import megsy-global-voice design for About / Media / Legal pages
 - [ ] Unify thinking/steps look across all agents
 - [ ] Memory system not working — investigate
@@ -136,7 +136,12 @@
 - [ ] Telegram bot webhook re-registration after deploy
 
 ## Oct 30 evening
-- [ ] Browserbase as a regular agent alongside the others
-- [ ] Fix chat image search relevance
-- [ ] Store images/videos on Telegram instead of database storage
+- [x] Browserbase as a regular agent engine (browserbase_read tool + fallback); live key read a real page
+- [x] Fix chat image search relevance (Cairo card verified live with correct photo; 4 tests)
+- [x] Store generated images/videos on Telegram (≤19 MB; round-trip verified); /storage bot command picks the chat
+- [x] Name confirmed: Megsy
+- [x] Lapsed paid plans expire daily (5 closed); billing page no longer shows ended plans as active
+- [x] + menu closes with Esc (verified)
+- [x] Revenue/traffic summaries made private; 14 internal operations locked to the system
+- [ ] Remaining ~90 older internal operations still callable by signed-in users: need one-by-one review
 - [x] Full site audit with test account (mobile), findings reported to user
