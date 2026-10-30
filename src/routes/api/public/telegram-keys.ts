@@ -54,6 +54,7 @@ const HELP = [
   "/keys_browseruse — مفاتيح Browser Use",
   "/keys_deapi — مفاتيح deAPI",
   "/keys_plusai — مفاتيح Plus AI",
+  "/storage — حفظ الصور والفيديوهات في المحادثة دي (أو <code>/storage -100…</code> لقناة)",
   "/del_cerebras رقم — حذف مفتاح",
   "/on_cerebras رقم — تفعيل مفتاح",
   "(نفس الصيغة لـ agentsky و browseruse و deapi)",
@@ -262,6 +263,16 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
         }
         if (!isAdmin) {
           await reply("غير مسموح.");
+          return Response.json({ ok: true });
+        }
+
+        // /storage → this chat stores generated photos/videos; /storage -100… sets a channel id.
+        if (/^\/storage(@\w+)?(\s|$)/.test(text)) {
+          const arg = text.split(/\s+/)[1] || "";
+          const target = /^-?\d{5,}$/.test(arg) ? arg : String(chatId);
+          const { setStorageChat } = await import("@/lib/telegramMediaStore.server");
+          await setStorageChat(target);
+          await reply(`تم ✅ الصور والفيديوهات هتتحفظ في المحادثة <code>${target}</code>.\nلو قناة، لازم البوت يكون أدمن فيها.`);
           return Response.json({ ok: true });
         }
 

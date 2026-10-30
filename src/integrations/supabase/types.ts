@@ -10877,6 +10877,36 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_media_files: {
+        Row: {
+          created_at: string
+          file_id: string
+          file_path: string | null
+          file_path_at: string | null
+          mime: string | null
+          size_bytes: number | null
+          source_key: string
+        }
+        Insert: {
+          created_at?: string
+          file_id: string
+          file_path?: string | null
+          file_path_at?: string | null
+          mime?: string | null
+          size_bytes?: number | null
+          source_key: string
+        }
+        Update: {
+          created_at?: string
+          file_id?: string
+          file_path?: string | null
+          file_path_at?: string | null
+          mime?: string | null
+          size_bytes?: number | null
+          source_key?: string
+        }
+        Relationships: []
+      }
       telegram_messages: {
         Row: {
           content: string
