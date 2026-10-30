@@ -107,7 +107,7 @@ export async function archiveToTelegram(sourceKey: string, bytes: Uint8Array, mi
     form.append("chat_id", chatId);
     form.append("disable_notification", "true");
     form.append("caption", `megsy:${sourceKey}`.slice(0, 200));
-    form.append("document", new Blob([bytes], { type: mime }), `megsy-${Date.now()}.${ext}`);
+    form.append("document", new Blob([bytes as unknown as ArrayBuffer], { type: mime }), `megsy-${Date.now()}.${ext}`);
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 15_000);
     const r = await fetch(`https://api.telegram.org/bot${token}/sendDocument`, {
