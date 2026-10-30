@@ -1,4 +1,4 @@
-export type ProviderId = "cerebras" | "agentsky" | "browser-use" | "deapi" | "plusai";
+export type ProviderId = "cerebras" | "agentsky" | "browser-use" | "deapi" | "plusai" | "browserbase";
 
 export function normalizeProvider(raw: string): ProviderId | null {
   const value = raw.trim().toLowerCase().replace(/[\s_-]/g, "");
@@ -7,6 +7,7 @@ export function normalizeProvider(raw: string): ProviderId | null {
   if (["browseruse", "browser", "b"].includes(value)) return "browser-use";
   if (["deapi", "d"].includes(value)) return "deapi";
   if (["plusai", "plus"].includes(value)) return "plusai";
+  if (["browserbase", "bb"].includes(value)) return "browserbase";
   return null;
 }
 
