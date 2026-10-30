@@ -396,12 +396,20 @@ const STALE_CHUNK_SCRIPT = `
       msg.indexOf("Importing a module script failed") !== -1
     );
   }
+  // A module can also fail while the server is briefly restarting, so retry a
+  // few times with growing pauses instead of leaving a blank screen.
+  var pending = false;
   function recover() {
+    if (pending) return;
+    var n = 0;
     try {
-      if (sessionStorage.getItem(KEY)) return;
-      sessionStorage.setItem(KEY, "1");
+      var saved = JSON.parse(sessionStorage.getItem(KEY) || "null");
+      if (saved && Date.now() - saved.at < 60000) n = saved.n || 0;
+      if (n >= 3) return;
+      sessionStorage.setItem(KEY, JSON.stringify({ n: n + 1, at: Date.now() }));
     } catch (e) {}
-    location.reload();
+    pending = true;
+    setTimeout(function () { location.reload(); }, [300, 1500, 4000][n] || 4000);
   }
   window.addEventListener("error", function (e) {
     if (isStale(e.message || "")) recover();
@@ -412,7 +420,7 @@ const STALE_CHUNK_SCRIPT = `
   });
   window.addEventListener("vite:preloadError", function () { recover(); });
   window.addEventListener("load", function () {
-    setTimeout(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} }, 5000);
+    setTimeout(function () { try { if (!pending) sessionStorage.removeItem(KEY); } catch (e) {} }, 15000);
   });
 })();
 `;

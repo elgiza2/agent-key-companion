@@ -194,7 +194,7 @@ const ChatMessageItemImpl = ({
         <AgentPresence message={msg} live={liveThought} />
       {!!msg.agentSkySteps?.length && <div className="px-3 md:px-12" data-agent-color={msg.agentSkyAgent?.color ?? "aurora"}><StepTimeline steps={msg.agentSkySteps} lang={/^[\u0600-\u06ff]/.test(msg.agentSkySteps[0]?.label ?? "") ? "ar" : "en"} /></div>}
       </>}
-      {msg.role === "assistant" && msg.agentSkyState ? null : showMediaSkeleton ? null : msg.role === "assistant" && msg.agentPending && !msg.computerTaskId && !msg.agentSkyState ? (
+      {msg.role === "assistant" && msg.agentSkyState && !(typeof msg.content === "string" && msg.content.trim()) ? null : showMediaSkeleton ? null : msg.role === "assistant" && msg.agentPending && !msg.computerTaskId && !msg.agentSkyState ? (
         <AgentThinkingLine text={liveThought} />
       ) : msg.role === "assistant" && msg.longRunId ? (
         <div className="flex flex-col gap-2">
@@ -230,12 +230,12 @@ const ChatMessageItemImpl = ({
           attachedImages={msg.attachedImages}
           attachedFiles={msg.attachedFiles}
           isStreaming={isStreamingThis}
-          isThinking={isThinking && isLastAssistant}
+          isThinking={!msg.agentSkyState && isThinking && isLastAssistant}
           searchStatus={isLastAssistant ? (searchStatus as any) : undefined}
           toolActivity={isLastAssistant ? (toolActivity as any) : null}
           parallelTasks={isLastAssistant ? (parallelTasks as any) : undefined}
           toolParts={msg.agentSkySessionId ? undefined : msg.toolParts}
-          reasoning={msg.reasoning}
+          reasoning={msg.agentSkyState ? undefined : msg.reasoning}
           interrupted={msg.interrupted}
           timing={msg.timing}
           modelLabel={msg.modelLabel}

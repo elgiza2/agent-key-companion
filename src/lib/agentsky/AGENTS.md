@@ -3,3 +3,4 @@
 - Guided agent creation stays in the existing chat, renders a validated propose_agent card and creates only on an explicit user click. Why: clarify requirements without autonomous agent creation.
 - Agent BASE_PROMPT changes require bumping PROMPT_REV so existing agents re-sync. Why: the stored agent prompt only refreshes when its stamp changes.
 - Defer workspace requests beyond auth callbacks and publish bootstrap data before optional history settles. Why: avoid re-entering the session lock or letting history delay the agents page.
+- Chat agent traffic (agentApi/openStream) goes to the deployed Supabase `agentsky` edge function, which owns that agent's prompt and MCP tool list; edits to agentsky.server.ts only affect the TanStack /api/agent path, and local-host origins map to the published URL. Why: preview tests must never store an unreachable tool URL, and prompt fixes must target the path actually in use.

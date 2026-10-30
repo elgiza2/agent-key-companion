@@ -145,3 +145,10 @@
 - [x] Revenue/traffic summaries made private; 14 internal operations locked to the system
 - [ ] Remaining ~90 older internal operations still callable by signed-in users: need one-by-one review
 - [x] Full site audit with test account (mobile), findings reported to user
+
+## Oct 30 – games, computer, teams
+- [x] Remove "Always-on teams" from agent settings
+- [x] In-chat games no longer stretch the chat or fight the scroll
+- [x] Agent/computer final answer now shows (it was hidden; looked like the session closed)
+- [ ] Live computer screen for the chat agent: the agent's own cloud browser is not installed at the provider; changing its instructions lives in the server agent code that can't be edited here
+- [ ] Wrong photo on some cards (Hacker News showed an unrelated person)
