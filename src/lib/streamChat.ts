@@ -1,3 +1,4 @@
+import { compactHistory } from "@/lib/chat/compactHistory";
 import { startJob, subscribeJob, resumeJob } from "@/lib/jobs/client";
 import { getAnonFingerprint } from "@/lib/anonFingerprint";
 import { isFastLaneEligible, tryFastChat } from "@/lib/chat/fastChat";
@@ -495,7 +496,7 @@ export async function streamChat({
       // buffer stalls long research turns, so we skip it in that mode.
       resume_id: deepResearch ? undefined : resumeId,
 
-      messages,
+      messages: deepResearch ? messages : compactHistory(messages as any[]),
       model,
       tier,
       // Deep Research runs fully inside our own agent: we already fetched and
