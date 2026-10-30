@@ -134,3 +134,9 @@
 - [x] Browserbase added to Telegram key bot (validated, stored in service_keys); agent consumer still pending
 - [x] KEY_VAULT_SECRET + bot token saved here (user-chosen value; old 13 vault rows were encrypted with a different value). Same value must also be set in Supabase function secrets
 - [ ] Telegram bot webhook re-registration after deploy
+
+## Oct 30 evening
+- [ ] Browserbase as a regular agent alongside the others
+- [ ] Fix chat image search relevance
+- [ ] Store images/videos on Telegram instead of database storage
+- [x] Full site audit with test account (mobile), findings reported to user
