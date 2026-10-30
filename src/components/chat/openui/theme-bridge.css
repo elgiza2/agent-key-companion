@@ -1,0 +1,233 @@
+/* Scope upstream tokens to chat and follow Nova's existing light/dark tokens. */
+.megsy-openui {
+  --iui-font: inherit;
+  --iui-canvas: var(--chat-ui-canvas);
+  --iui-ink: var(--chat-ui-ink);
+  --iui-muted: var(--chat-ui-muted);
+  --iui-faint: var(--chat-ui-muted);
+  --iui-on-ink: var(--chat-ui-canvas);
+  --iui-border: var(--chat-ui-border);
+  --iui-info: var(--chat-ui-accent);
+  --iui-info-soft: color-mix(in oklab, var(--chat-ui-accent) 10%, var(--chat-ui-canvas));
+  --iui-success: var(--chat-ui-success);
+  --iui-warning: var(--chat-ui-warning);
+  --iui-danger: var(--chat-ui-danger);
+  --iui-badge-success: var(--chat-ui-success);
+  --iui-badge-warning: var(--chat-ui-warning);
+  --iui-badge-danger: var(--chat-ui-danger);
+  --iui-badge-success-soft: color-mix(in oklab, var(--chat-ui-success) 10%, var(--chat-ui-canvas));
+  --iui-badge-warning-soft: color-mix(in oklab, var(--chat-ui-warning) 10%, var(--chat-ui-canvas));
+  --iui-badge-danger-soft: color-mix(in oklab, var(--chat-ui-danger) 10%, var(--chat-ui-canvas));
+  --iui-glass: color-mix(in oklab, var(--chat-ui-canvas) 92%, transparent);
+  --iui-glass-hover: var(--chat-ui-canvas);
+  --iui-shadow: var(--chat-ui-shadow);
+  --iui-radius-sm: 6px;
+  --iui-radius-md: 8px;
+  --iui-radius-lg: 8px;
+  --iui-radius-xl: 8px;
+  --iui-radius-2xl: 8px;
+  min-width: 0;
+  width: 100%;
+  color: var(--iui-ink);
+}
+.megsy-openui [class*="iui-"] {
+  letter-spacing: 0;
+}
+.megsy-openui .iui-image {
+  width: 100%;
+}
+.megsy-openui .iui-image img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+.megsy-openui .iui-title,
+.megsy-openui .iui-button {
+  overflow-wrap: anywhere;
+}
+
+.megsy-openui .iui-card {
+  box-shadow: var(--chat-ui-shadow);
+}
+.megsy-openui .iui-place-card {
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+}
+.megsy-openui .iui-destination-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  flex: 1;
+  min-width: 0;
+}
+.megsy-openui .iui-destination-heading,
+.megsy-openui .iui-menu-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.megsy-openui .iui-destination-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--iui-muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.megsy-openui .iui-destination-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--iui-warning);
+  font-size: 12px;
+  font-weight: 600;
+}
+.megsy-openui .iui-destination-title {
+  font: inherit;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.megsy-openui .iui-destination-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--iui-muted);
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.5;
+}
+.megsy-openui .iui-destination-meta svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.megsy-openui .iui-destination-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.megsy-openui .iui-destination-tags li {
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  color: var(--iui-muted);
+  background: var(--iui-surface);
+}
+.megsy-openui .iui-destination-price {
+  font-size: 15px;
+  font-weight: 650;
+  margin: 2px 0 0;
+}
+.megsy-openui .iui-destination-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+.megsy-openui .iui-destination-actions .iui-button {
+  border-radius: 6px;
+  min-height: 36px;
+  white-space: normal;
+}
+.megsy-openui .iui-menu-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--iui-border);
+}
+.megsy-openui .iui-menu-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.megsy-openui .iui-menu-price {
+  font-size: 13px;
+  white-space: nowrap;
+}
+.megsy-openui .iui-menu-photo {
+  width: 88px;
+  flex: 0 0 88px;
+}
+.megsy-openui .iui-schedule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--iui-border);
+}
+.megsy-openui .iui-schedule-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 72px;
+  flex: 0 0 72px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--iui-info);
+  padding: 12px 6px;
+  background: var(--iui-info-soft);
+  border-radius: 6px;
+}
+.megsy-openui .iui-schedule-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.megsy-openui .iui-schedule-status {
+  color: var(--iui-muted);
+  font-size: 11px;
+  padding: 3px 7px;
+  background: var(--iui-surface);
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+.megsy-openui .iui-schedule-status.is-confirmed {
+  color: var(--iui-success);
+  background: var(--iui-badge-success-soft);
+}
+.megsy-openui .iui-schedule-status.is-unavailable {
+  color: var(--iui-danger);
+  background: var(--iui-badge-danger-soft);
+}
+.megsy-openui .iui-segmented {
+  flex-wrap: wrap;
+}
+.megsy-openui .iui-button,
+.megsy-openui .iui-badge {
+  white-space: normal;
+}
+@media (max-width: 480px) {
+  .megsy-openui .iui-menu-photo {
+    width: 72px;
+    flex-basis: 72px;
+  }
+  .megsy-openui .iui-destination-heading {
+    gap: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .megsy-openui *,
+  .megsy-openui *::before,
+  .megsy-openui *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

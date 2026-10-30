@@ -1,0 +1,5 @@
+- AgentSky keys come from the `agentsky_keys` pool (LRU, service-role only), filled by the Telegram bot route; AGENTSKY_API_KEY is only a fallback. Why: keys rotate without redeploys.
+- Agent deliverables reach users as `file` cards via the `share_file` MCP tool or write-tool calls. Why: sandbox files are otherwise invisible.
+- Guided agent creation stays in the existing chat, renders a validated propose_agent card and creates only on an explicit user click. Why: clarify requirements without autonomous agent creation.
+- Agent BASE_PROMPT changes require bumping PROMPT_REV so existing agents re-sync. Why: the stored agent prompt only refreshes when its stamp changes.
+- Defer workspace requests beyond auth callbacks and publish bootstrap data before optional history settles. Why: avoid re-entering the session lock or letting history delay the agents page.

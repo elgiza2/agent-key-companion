@@ -1,24 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SpaMount } from "@/lib/spaMount";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+// The home page is the Megsy SPA itself (same mount as the catch-all `$` route).
 export const Route = createFileRoute("/")({
-  component: Index,
+  ssr: false,
+  component: SpaMount,
+  head: () => ({
+    meta: [
+      { title: "Megsy AI — AI Agent Workspace for Chat, Research, Images & Video" },
+      {
+        name: "description",
+        content:
+          "Use one AI agent workspace for chat, deep research, image and video generation, presentations, coding and browser automation in English and Arabic.",
+      },
+      { property: "og:title", content: "Megsy AI — AI Agent Workspace for Real Work" },
+      {
+        property: "og:description",
+        content:
+          "Chat, research the web, generate images and videos, build presentations and delegate browser tasks from one AI workspace.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Megsy AI — AI Agent Workspace for Real Work" },
+      {
+        name: "twitter:description",
+        content:
+          "Chat, research the web, generate images and videos, build presentations and delegate browser tasks from one AI workspace.",
+      },
+    ],
+  }),
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}

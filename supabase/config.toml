@@ -1,0 +1,4 @@
+project_id = "qdnqxjzjecaieuavagvq"
+
+[functions.team-tick]
+verify_jwt = false

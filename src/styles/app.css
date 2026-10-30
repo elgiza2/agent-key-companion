@@ -1,0 +1,186 @@
+/* Single render-critical CSS entry.
+ *
+ * These sheets used to be imported from `src/lib/spaBoot.ts`, which the "/$"
+ * route loads dynamically on the client. That meant the server-rendered HTML
+ * arrived with no stylesheet at all, so every page painted unstyled for a
+ * moment and looked broken while loading. Importing this file from
+ * `src/routes/__root.tsx` puts the whole bundle in the document's own graph, so
+ * the stylesheet ships as a <link> with the HTML.
+ *
+ * Order is load-bearing — keep it exactly as listed. */
+@import "../index.css";
+@import "./claude-chat.css";
+@import "./pwa-safe-area.css";
+@import "./pwa-responsive.css";
+@import "./font-fallback.css";
+@import "./view-transitions.css";
+@import "./megsy-tokens.css";
+@import "./deferred.css";
+@import "./chat-legibility.css";
+/* Must stay after the legacy sheets: keeps old mobile button colours from
+   coming back over the global sunset theme. */
+@import "./mobile-sunset-buttons.css";
+/* Light (white + pink) theme layer — after every legacy dark sheet. */
+@import "./light-theme.css";
+/* Chat accent layer must follow every legacy/theme sheet so their
+   !important bubble and composer rules cannot flatten it back to grey. */
+@import "./chat-vivid.css";
+@import "./desktop-fastshot-chat.css";
+@import "./desktop-workspace.css";
+/* Device-tier layer last, so nothing re-adds the expensive decorative effects
+   it strips on weak devices. */
+@import "./agent.css";
+@import "./perf-tier.css";
+
+@import "./auth-cue.css";
+@import "./public-pages.css";
+/* Shared liquid-glass surfaces for checkout and pricing — last, so theme
+   sheets cannot flatten the frosted layers back to flat cards. */
+@import "./glass.css";
+@import "./botanical-pricing.css";
+/* Checkout mirrors the botanical pricing design — last, so it wins over the
+   shared glass language and every legacy sheet. */
+@import "./checkout.css";
+@import "./settings-home.css";
+@import "./settings-glass.css";
+@import "./payment-sheet.css";
+
+
+/* User message bubble — Uiverse violet glow with rising points */
+.user-bubble-fx{position:relative;isolation:isolate;overflow:hidden;color:#fff;background:radial-gradient(65.28% 65.28% at 50% 100%,rgba(223,113,255,.8) 0%,rgba(223,113,255,0) 100%),linear-gradient(0deg,#7a5af8,#7a5af8);box-shadow:0 10px 26px -12px #7a5af8}
+.user-bubble-fx::before{content:"";position:absolute;inset:1px;border-radius:17px;z-index:0;pointer-events:none;background:linear-gradient(177.95deg,rgba(255,255,255,.19) 0%,rgba(255,255,255,0) 100%)}
+.user-bubble-points{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.user-bubble-points i{position:absolute;bottom:-10px;width:2px;height:2px;border-radius:9999px;background:#fff;animation:ub-float 2.2s infinite ease-in-out}
+@keyframes ub-float{0%{transform:translateY(0)}85%{opacity:0}100%{transform:translateY(-55px);opacity:0}}
+.user-bubble-points i:nth-child(1){left:10%;animation-duration:2.35s;animation-delay:.2s}
+.user-bubble-points i:nth-child(2){left:30%;opacity:.7;animation-duration:2.5s;animation-delay:.5s}
+.user-bubble-points i:nth-child(3){left:25%;opacity:.8;animation-duration:2.2s;animation-delay:.1s}
+.user-bubble-points i:nth-child(4){left:44%;opacity:.6;animation-duration:2.05s}
+.user-bubble-points i:nth-child(5){left:50%;animation-duration:1.9s}
+.user-bubble-points i:nth-child(6){left:75%;opacity:.5;animation-duration:1.5s;animation-delay:1.5s}
+.user-bubble-points i:nth-child(7){left:88%;opacity:.9;animation-duration:2.2s;animation-delay:.2s}
+.user-bubble-points i:nth-child(8){left:58%;opacity:.8;animation-duration:2.25s;animation-delay:.2s}
+.user-bubble-points i:nth-child(9){left:98%;opacity:.6;animation-duration:2.6s;animation-delay:.1s}
+.user-bubble-points i:nth-child(10){left:65%;animation-duration:2.5s;animation-delay:.2s}
+@media (prefers-reduced-motion:reduce){.user-bubble-points{display:none}}
+
+/* user message: solid pink with the same glow + rising dots, no shadow.
+   Triple class + dark variant beats the sunset/primary rules in chat-vivid.css
+   and deferred.css by specificity, so it survives in both themes. */
+.user-bubble.user-bubble.user-bubble,
+html.dark [data-shell="megsy"] .user-bubble.user-bubble.user-bubble{
+  background:radial-gradient(65.28% 65.28% at 50% 100%,rgba(255,125,190,.85) 0%,rgba(255,125,190,0) 100%),linear-gradient(0deg,#ff2d7e,#ff2d7e)!important;
+  box-shadow:none!important;
+  border:0!important;
+  color:#fff!important;
+}
+
+/* ===== Working steps (thinking + agent): flat, icon-free, shadow-free.
+   Violet → pink in the Uiverse tone, CSS-drawn ring instead of any glyph. ===== */
+.mtrace{
+  --mt-violet:#7a5af8;
+  --mt-pink:#ff2d7e;
+  position:relative;
+  min-width:0;
+  margin-block-end:.7rem;
+}
+.mtrace-head{
+  display:flex; align-items:center; gap:.5rem; width:100%;
+  padding:2px 0; border:0; background:none; box-shadow:none;
+  color:hsl(var(--muted-foreground)); text-align:start; cursor:pointer;
+}
+.mtrace-head:disabled{ cursor:default }
+/* Thinking loader (Uiverse _5797): glowing inset-shadow orb */
+.mring{
+  position:relative; flex:0 0 auto; width:18px; height:18px; aspect-ratio:1/1; border-radius:50%;
+  background-color:transparent; animation:loader-rotate 1.5s linear infinite;
+}
+@keyframes loader-rotate{
+  0%{ transform:rotate(90deg); box-shadow:0 1px 1px 0 #fff inset,0 3px 5px 0 #ff2b2b inset,0 4px 4px 0 #ff0606 inset }
+  50%{ transform:rotate(270deg); background:#ffe8e9; box-shadow:0 1px 1px 0 #ffc8c8 inset,0 3px 5px 0 #ff1b1b inset,0 4px 4px 0 #fbef19 inset }
+  100%{ transform:rotate(450deg); box-shadow:0 1px 1px 0 #fff inset,0 3px 5px 0 #ff8f8f inset,0 4px 4px 0 #ff1b1b inset }
+}
+.loader-letters{ display:inline-flex; flex-wrap:wrap; gap:1px; color:hsl(var(--foreground)); background:none!important; -webkit-text-fill-color:currentColor }
+.loader-letter{ display:inline-block; opacity:.4; animation:loader-letter-anim 2s infinite; border-radius:50ch }
+@keyframes loader-letter-anim{ 0%,100%{opacity:.4;transform:translateY(0)} 20%{opacity:1;transform:scale(1.15)} 40%{opacity:.7;transform:translateY(0)} }
+@media (prefers-reduced-motion:reduce){ .loader-letter{animation:none;opacity:1} }
+@keyframes mspin{ to{ transform:rotate(1turn) } }
+.mdot{
+  flex:0 0 auto; width:7px; height:7px; border-radius:50%;
+  background:linear-gradient(135deg, var(--mt-violet), var(--mt-pink));
+}
+.mtrace-label{ min-width:0; overflow-wrap:anywhere; font-size:13px; line-height:1.45 }
+.mtrace-label.is-live{
+  background:linear-gradient(90deg, var(--mt-violet), var(--mt-pink), var(--mt-violet)) 0 0/300% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:mtide 3.6s linear infinite;
+}
+@keyframes mtide{ to{ background-position:-300% 0 } }
+.mtoggle{
+  flex:0 0 auto; margin-inline-start:auto; padding:2px 2px;
+  font-size:11.5px; color:hsl(var(--muted-foreground)); opacity:.8;
+}
+.mtrace-head:hover .mtoggle{ color:var(--mt-violet); opacity:1 }
+.msteps{
+  position:relative; display:flex; flex-direction:column; gap:7px;
+  margin:7px 0 0; padding:0 0 0 16px; padding-inline-start:16px; list-style:none;
+}
+.msteps::before{
+  content:""; position:absolute; inset-block:3px; inset-inline-start:4px; width:2px; border-radius:2px;
+  background:linear-gradient(180deg, var(--mt-violet), var(--mt-pink) 55%, transparent);
+  opacity:.4;
+}
+.mstep{ display:flex; align-items:baseline; gap:8px; min-width:0 }
+.mstep-idx{
+  flex:0 0 auto; font-size:10.5px; font-variant-numeric:tabular-nums;
+  color:var(--mt-violet); opacity:.7;
+}
+.mstep-text{
+  min-width:0; flex:1; overflow-wrap:anywhere;
+  font-size:12.5px; line-height:1.55; color:hsl(var(--muted-foreground));
+}
+.mstep.is-live .mstep-text{
+  background:linear-gradient(90deg, var(--mt-violet), var(--mt-pink), var(--mt-violet)) 0 0/300% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:mtide 3.6s linear infinite;
+}
+@media (prefers-reduced-motion:reduce){
+  .mring{ animation:none }
+  .mtrace-label.is-live, .mstep.is-live .mstep-text{ animation:none }
+}
+
+/* Central chat robot shares the Uiverse action palette and rising particles. */
+:root{
+  --chat-fx-violet:#7a5af8;
+  --chat-fx-blue:#2f6bff;
+  --chat-fx-gold:#e8a33d;
+  --chat-fx-yellow:#ffd23f;
+  --chat-fx-glow:rgba(223,113,255,.8);
+  --chat-fx-clear:rgba(223,113,255,0);
+  --chat-fx-highlight:rgba(255,255,255,.22);
+  --chat-fx-point:#fff;
+}
+.ag-orb--chat .ag-orb__body{
+  background:radial-gradient(65.28% 65.28% at 50% 100%,var(--chat-fx-glow),var(--chat-fx-clear)),linear-gradient(120deg,var(--chat-fx-violet),var(--chat-fx-blue),var(--chat-fx-gold),var(--chat-fx-yellow),var(--chat-fx-violet));
+  background-size:100% 100%,300% 100%;
+  box-shadow:none;
+  animation:chat-robot-colors 7s ease-in-out infinite,ag-morph 7s ease-in-out infinite,ag-float 4.5s ease-in-out infinite;
+}
+.ag-orb--chat .ag-orb__body::before{content:"";position:absolute;inset:1px;border-radius:inherit;background:linear-gradient(178deg,var(--chat-fx-highlight),var(--chat-fx-clear));pointer-events:none}
+.ag-orb--chat .ag-orb__particles{position:absolute;inset:0;border-radius:50%;overflow:hidden;pointer-events:none}
+.ag-orb__particles i{position:absolute;bottom:-5px;width:2px;height:2px;border-radius:50%;background:var(--chat-fx-point);animation:chat-robot-points 2.35s ease-in-out infinite}
+.ag-orb__particles i:nth-child(1){left:10%;animation-delay:-.2s}
+.ag-orb__particles i:nth-child(2){left:30%;animation-delay:-.5s}
+.ag-orb__particles i:nth-child(3){left:25%;animation-delay:-1.1s}
+.ag-orb__particles i:nth-child(4){left:44%;animation-delay:-1.8s}
+.ag-orb__particles i:nth-child(5){left:50%;animation-delay:-.9s}
+.ag-orb__particles i:nth-child(6){left:75%;animation-delay:-1.5s}
+.ag-orb__particles i:nth-child(7){left:88%;animation-delay:-.4s}
+.ag-orb__particles i:nth-child(8){left:58%;animation-delay:-1.3s}
+.ag-orb__particles i:nth-child(9){left:94%;animation-delay:-.7s}
+.ag-orb__particles i:nth-child(10){left:65%;animation-delay:-2s}
+@keyframes chat-robot-colors{0%,100%{background-position:0 0,0% 50%}50%{background-position:0 0,100% 50%}}
+@keyframes chat-robot-points{0%{transform:translateY(0);opacity:.8}85%,100%{transform:translateY(-80px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.ag-orb--chat .ag-orb__body{animation:none!important}.ag-orb__particles{display:none}}
+/* robot: blue only */
+:root{--chat-fx-violet:#1e4fd8;--chat-fx-blue:#2f6bff;--chat-fx-gold:#3b82f6;--chat-fx-yellow:#60a5fa;--chat-fx-glow:rgba(96,165,250,.75);--chat-fx-clear:rgba(96,165,250,0)}
