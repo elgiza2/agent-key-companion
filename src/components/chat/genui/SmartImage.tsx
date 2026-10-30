@@ -2,33 +2,14 @@
  *  search phrase ("Pyramids of Giza"); phrases resolve to a real photo through
  *  Wikipedia's public API (CORS-enabled, no key). Falls back to a soft gradient. */
 import { useEffect, useState } from "react";
+import { findPhoto } from "./photoLookup";
 
 const cache = new Map<string, Promise<string | null>>();
 
 async function lookup(q: string): Promise<string | null> {
-  const tryLang = async (lang: string) => {
-    // Exact named subjects first: search ranking can return a related dish or
-    // another product ahead of the actual article the user asked about.
-    const exact = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&titles=${encodeURIComponent(q)}&prop=pageimages&piprop=thumbnail&pithumbsize=800`);
-    if (exact.ok) {
-      const data = await exact.json();
-      const pages = Object.values(data?.query?.pages ?? {}) as { thumbnail?: { source?: string } }[];
-      const photo = pages.find((page) => page.thumbnail?.source)?.thumbnail?.source;
-      if (photo) return photo;
-    }
-    const u = `https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrlimit=3&prop=pageimages&piprop=thumbnail&pithumbsize=800`;
-    const r = await fetch(u);
-    if (!r.ok) return null;
-    const j = await r.json();
-    const pages = Object.values(j?.query?.pages ?? {}) as any[];
-    pages.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
-    return pages.find((p) => p.thumbnail?.source)?.thumbnail.source ?? null;
-  };
-  try {
-    return (await tryLang("en")) ?? (/[\u0600-\u06FF]/.test(q) ? await tryLang("ar") : null);
-  } catch {
-    return null;
-  }
+  const en = await findPhoto(q, "en");
+  if (en) return en;
+  return /[\u0600-\u06FF]/.test(q) ? findPhoto(q, "ar") : null;
 }
 
 export function resolveImage(q: string) {

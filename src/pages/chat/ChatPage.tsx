@@ -729,6 +729,16 @@ const ChatPage = () => {
     }
   }, [plusMenuOpen]);
 
+  // Esc closes the plus menu on every layout (desktop popover and mobile card).
+  useEffect(() => {
+    if (!plusMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPlusMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [plusMenuOpen, setPlusMenuOpen]);
+
   // One-time semantic backfill for legacy data (no-op after the first run).
   useEmbedBackfill();
 

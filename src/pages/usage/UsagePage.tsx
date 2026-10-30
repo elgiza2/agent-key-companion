@@ -143,7 +143,10 @@ const UsagePage = () => {
   }, []);
 
   const sub = subs[0] ?? null;
-  const isActive = sub?.status === "active" || sub?.status === "trialing";
+  // A plan whose paid period already ended is not active, even if the row says so.
+  const isActive =
+    (sub?.status === "active" || sub?.status === "trialing") &&
+    (!sub?.current_period_end || new Date(sub.current_period_end).getTime() > Date.now());
   const autoRenew = Boolean(sub?.auto_renew) && isActive;
   const amountLabel = sub?.amount_cents
     ? money(sub.amount_cents, sub.currency)

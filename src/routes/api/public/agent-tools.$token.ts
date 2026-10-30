@@ -49,6 +49,19 @@ const TOOLS = [
     },
   },
   {
+    name: "browserbase_read",
+    description:
+      "Open a page through a real cloud browser identity (Browserbase) and get it as clean markdown. Use when web_fetch is blocked, returns almost nothing, or the site rejects bots; set proxies=true for geo/anti-bot walls. Faster and cheaper than browse_web; no clicking.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        url: { type: "string", description: "http(s) URL to open" },
+        proxies: { type: "boolean", description: "Route through residential proxies" },
+      },
+      required: ["url"],
+    },
+  },
+  {
     name: "remember",
     description:
       "Save a durable fact about the user (preference, identity, project, decision) so future sessions recall it. Use key/value, e.g. key='timezone', value='Africa/Cairo'.",
@@ -386,15 +399,30 @@ async function runTool(userId: string, origin: string, name: string, args: any, 
       try {
         const { serverWebFetch } = await import("@/lib/agentsky/sandbox.server");
         const out = await serverWebFetch(url);
-        return {
-          text: out.ok
-            ? `Page text:\n${out.output}`
-            : `Fetch failed, try another URL or source:\n${out.output}`,
-        };
+        if (out.ok) return { text: `Page text:\n${out.output}` };
+        const { browserbaseFetch } = await import("@/lib/agentsky/browserbase.server");
+        const bb = await browserbaseFetch(url);
+        if (bb.ok) return { text: `Page text:\n${bb.output}` };
+        return { text: `Fetch failed, try another URL or source:\n${out.output}` };
       } catch (e: any) {
         return {
           text: `Fetch error: ${String(e?.message || e).slice(0, 300)}. Try another source.`,
         };
+      }
+    }
+    case "browserbase_read": {
+      const url = String(args?.url ?? "").trim();
+      if (!url) return { text: "Missing url." };
+      try {
+        const { browserbaseFetch } = await import("@/lib/agentsky/browserbase.server");
+        const out = await browserbaseFetch(url, { proxies: Boolean(args?.proxies) });
+        return {
+          text: out.ok
+            ? `Page content:\n${out.output}`
+            : `Could not open the page, try web_fetch or browse_web:\n${out.output}`,
+        };
+      } catch (e: any) {
+        return { text: `Browserbase error: ${String(e?.message || e).slice(0, 300)}` };
       }
     }
     case "remember": {
@@ -557,6 +585,15 @@ async function runTool(userId: string, origin: string, name: string, args: any, 
         const { runAgentBrowserTask } = await import("@/lib/agentsky/browser.server");
         const minutes = Math.min(Math.max(Number(args?.budget_minutes) || 10, 2), 120);
         const out = await runAgentBrowserTask(userId, task, minutes * 60_000);
+        if (!out.ok) {
+          // Second browser engine: Browserbase reads the page the task points at.
+          const { browserbaseFetch, firstUrl } = await import("@/lib/agentsky/browserbase.server");
+          const url = firstUrl(task);
+          if (url) {
+            const bb = await browserbaseFetch(url, { proxies: true });
+            if (bb.ok) return { text: `Browser result (page content):\n${bb.output}` };
+          }
+        }
         const payload = out.files?.length
           ? { type: "megsy.browser_files", files: out.files }
           : undefined;

@@ -13304,6 +13304,10 @@ export type Database = {
         }
       }
       ensure_telegram_referral_code: { Args: never; Returns: string }
+      expire_lapsed_subscriptions: {
+        Args: { _grace?: string }
+        Returns: number
+      }
       get_credit_overview: { Args: never; Returns: Json }
       get_integration_secret: {
         Args: {
