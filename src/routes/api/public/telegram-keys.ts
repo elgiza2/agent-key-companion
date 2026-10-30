@@ -34,6 +34,7 @@ const PROVIDERS: Record<ProviderId, { label: string; icon: string }> = {
   "browser-use": { label: "Browser Use", icon: "🌐" },
   deapi: { label: "deAPI", icon: "🎨" },
   plusai: { label: "Plus AI", icon: "📊" },
+  browserbase: { label: "Browserbase", icon: "🛰️" },
 };
 
 // Webhook instances are stateless, so the pending provider lives in memory AND
@@ -69,7 +70,10 @@ function providerMenu() {
         { text: "🌐 Browser Use", callback_data: "keys:provider:browser-use" },
         { text: "🎨 deAPI", callback_data: "keys:provider:deapi" },
       ],
-      [{ text: "📊 Plus AI", callback_data: "keys:provider:plusai" }],
+      [
+        { text: "📊 Plus AI", callback_data: "keys:provider:plusai" },
+        { text: "🛰️ Browserbase", callback_data: "keys:provider:browserbase" },
+      ],
       [{ text: "📊 الإحصائيات", callback_data: "keys:stats" }],
     ],
   };
@@ -95,6 +99,17 @@ async function validateBrowserUseKey(key: string): Promise<boolean> {
     });
     // Credit/auth rejections belong to the key → invalid for rotation.
     if ([401, 402, 403].includes(res.status)) return false;
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function validateBrowserbaseKey(key: string): Promise<boolean> {
+  try {
+    const res = await fetch("https://api.browserbase.com/v1/projects", {
+      headers: { "X-BB-API-Key": key },
+    });
     return res.ok;
   } catch {
     return false;
@@ -209,6 +224,7 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
                 `🌐 Browser Use: ${counts["browser-use"]?.active ?? 0} نشط / ${counts["browser-use"]?.banned ?? 0} محظور`,
                 `🎨 deAPI: ${counts["deapi"]?.active ?? 0} نشط / ${counts["deapi"]?.banned ?? 0} محظور`,
                 `📊 Plus AI: ${counts["plusai"]?.active ?? 0} محفوظ`,
+                `🛰️ Browserbase: ${counts["browserbase"]?.active ?? 0} نشط / ${counts["browserbase"]?.banned ?? 0} محظور`,
                 "",
                 "التدوير تلقائي: الأقل استخدامًا أولًا، وحظر بعد 3 فشل متتالي مع إحياء تلقائي.",
               ].join("\n"),
@@ -300,7 +316,9 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
               ? await validateCerebrasKey(key)
               : provider === "deapi"
                 ? await validateDeapiKey(key)
-                : await validateBrowserUseKey(key);
+                : provider === "browserbase"
+                  ? await validateBrowserbaseKey(key)
+                  : await validateBrowserUseKey(key);
           if (!ok) {
             await reply("المفتاح ده مش شغال عند المزود ❌");
             return;
@@ -343,7 +361,7 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
         }
 
         const addMatch = text.match(
-          /^\/add[_-]?(cerebras|agentsky|agent|browseruse|browser-use|browser|deapi|plusai|plus-ai|plus_ai|plus)\s+(\S+)\s*$/i,
+          /^\/add[_-]?(cerebras|agentsky|agent|browseruse|browser-use|browser|deapi|plusai|plus-ai|plus_ai|plus|browserbase|bb)\s+(\S+)\s*$/i,
         );
         if (addMatch) {
           const provider = normalizeProvider(addMatch[1]);
@@ -355,7 +373,7 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
         }
 
         const selectMatch = text.match(
-          /^\/(cerebras|agentsky|agent|browseruse|browser-use|browser|deapi|plusai|plus-ai|plus_ai|plus)\s*$/i,
+          /^\/(cerebras|agentsky|agent|browseruse|browser-use|browser|deapi|plusai|plus-ai|plus_ai|plus|browserbase|bb)\s*$/i,
         );
         if (selectMatch) {
           const provider = normalizeProvider(selectMatch[1]);
@@ -374,7 +392,7 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
             .replace(/_/g, "-")
             .replace(/^-+/, "");
           const only = rest ? normalizeProvider(rest) : null;
-          if (only === "cerebras" || only === "browser-use" || only === "deapi" || only === "plusai") {
+          if (only === "cerebras" || only === "browser-use" || only === "deapi" || only === "plusai" || only === "browserbase") {
             const vaultProvider = only;
             await reply(
               formatVaultRows(
@@ -434,7 +452,7 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
         }
 
         const modMatch = text.match(
-          /^\/(del|on)[_-]?(cerebras|agentsky|agent|browseruse|browser-use|browser|deapi|plusai|plus-ai|plus_ai|plus)?\s+(\d+)\s*$/i,
+          /^\/(del|on)[_-]?(cerebras|agentsky|agent|browseruse|browser-use|browser|deapi|plusai|plus-ai|plus_ai|plus|browserbase|bb)?\s+(\d+)\s*$/i,
         );
         if (modMatch) {
           const cmd = modMatch[1].toLowerCase();
