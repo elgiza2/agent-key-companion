@@ -117,8 +117,10 @@ export function useChatScroll(params: {
 
     let frame = 0;
     // Playing a game or using a tool inside a chat drawing focuses its frame;
-    // its taps never reach this container, so treat that focus as interaction.
-    const widgetFocused = () => document.activeElement?.tagName === "IFRAME";
+    // its taps never reach this container, so treat that focus as interaction
+    // only while no reply is streaming (a widget button that sends a message
+    // keeps focus in the frame, and the new reply must still be followed).
+    const widgetFocused = () => !isLoading && document.activeElement?.tagName === "IFRAME";
     const observer = new ResizeObserver(() => {
       if (!pinnedToBottomRef.current || userInteractingRef.current || widgetFocused()) return;
       cancelAnimationFrame(frame);
