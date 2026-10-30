@@ -90,6 +90,16 @@ export async function closePageView(): Promise<void> {
  */
 export async function trackPageView(path: string): Promise<void> {
   await closePageView();
+  // Record each page once per browser session to keep database writes low.
+  try {
+    const seenKey = "megsy_seen_paths";
+    const seen = new Set<string>(JSON.parse(sessionStorage.getItem(seenKey) || "[]"));
+    if (seen.has(path)) return;
+    seen.add(path);
+    sessionStorage.setItem(seenKey, JSON.stringify([...seen].slice(-200)));
+  } catch {
+    /* ignore */
+  }
   startedAt = Date.now();
   const id = newId();
   try {
