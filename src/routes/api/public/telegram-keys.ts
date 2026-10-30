@@ -265,6 +265,16 @@ export const Route = createFileRoute("/api/public/telegram-keys")({
           return Response.json({ ok: true });
         }
 
+        // /storage → this chat stores generated photos/videos; /storage -100… sets a channel id.
+        if (/^\/storage(@\w+)?(\s|$)/.test(text)) {
+          const arg = text.split(/\s+/)[1] || "";
+          const target = /^-?\d{5,}$/.test(arg) ? arg : String(chatId);
+          const { setStorageChat } = await import("@/lib/telegramMediaStore.server");
+          await setStorageChat(target);
+          await reply(`تم ✅ الصور والفيديوهات هتتحفظ في المحادثة <code>${target}</code>.\nلو قناة، لازم البوت يكون أدمن فيها.`);
+          return Response.json({ ok: true });
+        }
+
         const listAgentsky = async () => {
           const { data } = await db
             .from("agentsky_keys")
