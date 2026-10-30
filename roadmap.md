@@ -132,5 +132,5 @@
 - [x] Agent steps now render with the fast-chat thinking surface
 - [~] Token saving: chat history trimmed client-side (last 10, older long text shortened). Server-side duplicate visual prompt removal blocked: backend functions not editable here
 - [x] Browserbase added to Telegram key bot (validated, stored in service_keys); agent consumer still pending
-- [ ] KEY_VAULT_SECRET on the published server — needs secure provisioning on the host
+- [x] KEY_VAULT_SECRET + bot token saved here (user-chosen value; old 13 vault rows were encrypted with a different value). Same value must also be set in Supabase function secrets
 - [ ] Telegram bot webhook re-registration after deploy
