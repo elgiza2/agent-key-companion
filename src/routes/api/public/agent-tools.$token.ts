@@ -49,6 +49,19 @@ const TOOLS = [
     },
   },
   {
+    name: "browserbase_read",
+    description:
+      "Open a page through a real cloud browser identity (Browserbase) and get it as clean markdown. Use when web_fetch is blocked, returns almost nothing, or the site rejects bots; set proxies=true for geo/anti-bot walls. Faster and cheaper than browse_web; no clicking.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        url: { type: "string", description: "http(s) URL to open" },
+        proxies: { type: "boolean", description: "Route through residential proxies" },
+      },
+      required: ["url"],
+    },
+  },
+  {
     name: "remember",
     description:
       "Save a durable fact about the user (preference, identity, project, decision) so future sessions recall it. Use key/value, e.g. key='timezone', value='Africa/Cairo'.",
