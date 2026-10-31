@@ -1,5 +1,6 @@
 /** @doc Main chat workspace — all modes, all models, attachments, agents and the composer live here. */
 import { detectMediaIntent as detectChatMediaIntent } from "@/lib/agentsky/mediaIntent";
+import type { MediaPlan } from "@/components/chat/media/MediaPlanCard";
 import SEOHead from "@/components/common/SEOHead";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useMediaUpload } from "@/hooks/useMediaUpload";
@@ -1527,10 +1528,86 @@ const ChatPage = () => {
       selectedAgent?.id === "docs" ||
       selectedAgent?.id === "dev" ||
       selectedAgent?.id === "computer" ||
-      selectedAgent?.id === "agent" ||
-      // "اعملي صورة / فيديو" typed in normal chat goes to the media agent
-      // instead of the text model, which could only pretend to draw it.
-      (chatMode === "normal" && Boolean(detectChatMediaIntent(text)));
+      selectedAgent?.id === "agent";
+
+    // Image / video requests (Images or Video mode, or "اعملي صورة…" typed in
+    // normal chat) run the direct media pipeline: the text model could only
+    // pretend to draw, and the agent session path depends on a provider
+    // template that may be missing. Attachments (edits) keep the agent path.
+    const directMediaKind: "image" | "video" | null =
+      chatUserId && text.trim() && !requestedAgentId && !selectedAgent?.id && attachedFiles.length === 0
+        ? chatMode === "images"
+          ? "image"
+          : chatMode === "video"
+            ? "video"
+            : chatMode === "normal"
+              ? detectChatMediaIntent(text)
+              : null
+        : null;
+    if (directMediaKind) {
+      isSubmittingRef.current = true;
+      submitLockAtRef.current = Date.now();
+      const localTurnId =
+        typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random()}`;
+      const mode = directMediaKind === "video" ? "video" : "images";
+      const title = text.trim().replace(/\s+/g, " ").slice(0, 60);
+      const plan: MediaPlan = {
+        mode,
+        modelSlug: directMediaKind === "video" ? "deapi-ltx-video" : "deapi-flux-schnell",
+        modelName: "Megsy",
+        summary: text.trim().slice(0, 140),
+        originalPrompt: text.trim(),
+        aspectRatio: directMediaKind === "video" ? "16:9" : "1:1",
+        generationKey: `${mode}:${localTurnId}`,
+        scenes: [
+          {
+            index: 1,
+            title,
+            prompt: text.trim(),
+            ...(directMediaKind === "video" ? { duration_seconds: 5 } : {}),
+          },
+        ],
+      };
+      const mediaResults = [{ index: 1, title, status: "pending" as const, type: directMediaKind }];
+      const userMsg: Message = { role: "user", clientId: `user-${localTurnId}`, content: text, mode: chatMode };
+      setMessages((prev) => [...prev, userMsg]);
+      setInput("");
+      try {
+        const convId = await createOrUpdateConversation(text);
+        let assistantId: string | undefined;
+        if (convId) {
+          const userId = await saveMessage(convId, "user", text);
+          if (userId) ownInsertedIdsRef.current.add(userId);
+          assistantId = await saveMessage(convId, "assistant", "", undefined, {
+            kind: "mediaPlan",
+            mode,
+            mediaPlan: plan,
+            mediaStatus: "awaiting",
+            mediaResults,
+          });
+          if (assistantId) ownInsertedIdsRef.current.add(assistantId);
+          window.dispatchEvent(new CustomEvent("megsy:conversations-changed"));
+        }
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "",
+            clientId: `assistant-${localTurnId}`,
+            ...(assistantId ? { id: assistantId } : {}),
+            mode,
+            mediaPlan: plan,
+            mediaStatus: "awaiting",
+            mediaResults,
+          },
+        ]);
+      } finally {
+        isSubmittingRef.current = false;
+      }
+      return;
+    }
     if (
       text.trim() &&
       chatUserId &&
