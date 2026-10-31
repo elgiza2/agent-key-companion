@@ -1,4 +1,5 @@
 /** @doc Main chat workspace — all modes, all models, attachments, agents and the composer live here. */
+import { detectMediaIntent as detectChatMediaIntent } from "@/lib/agentsky/mediaIntent";
 import SEOHead from "@/components/common/SEOHead";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useMediaUpload } from "@/hooks/useMediaUpload";
@@ -1526,7 +1527,10 @@ const ChatPage = () => {
       selectedAgent?.id === "docs" ||
       selectedAgent?.id === "dev" ||
       selectedAgent?.id === "computer" ||
-      selectedAgent?.id === "agent";
+      selectedAgent?.id === "agent" ||
+      // "اعملي صورة / فيديو" typed in normal chat goes to the media agent
+      // instead of the text model, which could only pretend to draw it.
+      (chatMode === "normal" && Boolean(detectChatMediaIntent(text)));
     if (
       text.trim() &&
       chatUserId &&
