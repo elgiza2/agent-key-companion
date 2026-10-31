@@ -1544,7 +1544,6 @@ const ChatPage = () => {
               ? detectChatMediaIntent(text)
               : null
         : null;
-    (window as any).__dbgMedia = [directMediaKind, chatMode, !!chatUserId, requestedAgentId, selectedAgent?.id, attachedFiles.length, useFastChat];
     if (directMediaKind) {
       isSubmittingRef.current = true;
       submitLockAtRef.current = Date.now();
