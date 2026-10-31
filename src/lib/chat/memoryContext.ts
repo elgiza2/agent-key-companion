@@ -127,19 +127,27 @@ export async function fetchMemoryBrief(question: string, currentConversationId?:
     let snippets: PastSnippet[] = [];
     if (recall) {
       const keywords = recallKeywords(question);
-      const [convs, ...matches] = await Promise.all([
-        supabase.from("conversations").select("id,title,updated_at").eq("user_id", userId).order("updated_at", { ascending: false }).limit(20),
-        ...keywords.map((k) =>
-          supabase
-            .from("messages")
-            .select("conversation_id,role,content,created_at")
-            .eq("user_id", userId)
-            .ilike("content", `%${k.replace(/[%_]/g, "")}%`)
-            .order("created_at", { ascending: false })
-            .limit(4),
-        ),
-      ]);
+      const convs = await supabase
+        .from("conversations")
+        .select("id,title,updated_at")
+        .eq("user_id", userId)
+        .order("updated_at", { ascending: false })
+        .limit(60);
       const convRows = ((convs.data as any[]) || []).filter((c) => c.id !== currentConversationId);
+      const ids = convRows.map((c) => c.id);
+      const matches = ids.length
+        ? await Promise.all(
+            keywords.map((k) =>
+              supabase
+                .from("messages")
+                .select("conversation_id,role,content,created_at")
+                .in("conversation_id", ids)
+                .ilike("content", `%${k.replace(/[%_]/g, "")}%`)
+                .order("created_at", { ascending: false })
+                .limit(4),
+            ),
+          )
+        : [];
       const titleOf = new Map(convRows.map((c) => [c.id, String(c.title || "")]));
       recentTitles = convRows
         .map((c) => `${String(c.title || "Untitled").slice(0, 80)} (${String(c.updated_at || "").slice(0, 10)})`)
