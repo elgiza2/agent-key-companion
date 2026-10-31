@@ -155,3 +155,4 @@
 
 - [ ] Chat recall: answer questions about past chats / saved memory
 - [ ] Remove follow-up suggestions shown under chat widgets/drawings
+- [ ] Fix image and video generation in chat
