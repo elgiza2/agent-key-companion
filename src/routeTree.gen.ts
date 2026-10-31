@@ -27,6 +27,7 @@ import { Route as ApiPublicFxRouteImport } from './routes/api/public/fx'
 import { Route as ApiPublicGeoRouteImport } from './routes/api/public/geo'
 import { Route as ApiPublicRemindersTickRouteImport } from './routes/api/public/reminders-tick'
 import { Route as ApiPublicTelegramKeysRouteImport } from './routes/api/public/telegram-keys'
+import { Route as ApiSubscriptionStatusRouteImport } from './routes/api/subscription/status'
 import { Route as ApiPublicAgentToolsTokenRouteImport } from './routes/api/public/agent-tools.$token'
 import { Route as ApiPublicMediaStatusRunIdRouteImport } from './routes/api/public/media-status.$runId'
 import { Route as ApiPublicMediaRunIdIndexRouteImport } from './routes/api/public/media.$runId.$index'
@@ -121,6 +122,11 @@ const ApiPublicTelegramKeysRoute = ApiPublicTelegramKeysRouteImport.update({
   path: '/api/public/telegram-keys',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSubscriptionStatusRoute = ApiSubscriptionStatusRouteImport.update({
+  id: '/api/subscription/status',
+  path: '/api/subscription/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicAgentToolsTokenRoute =
   ApiPublicAgentToolsTokenRouteImport.update({
     id: '/api/public/agent-tools/$token',
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/api/public/geo': typeof ApiPublicGeoRoute
   '/api/public/reminders-tick': typeof ApiPublicRemindersTickRoute
   '/api/public/telegram-keys': typeof ApiPublicTelegramKeysRoute
+  '/api/subscription/status': typeof ApiSubscriptionStatusRoute
   '/api/public/agent-tools/$token': typeof ApiPublicAgentToolsTokenRoute
   '/api/public/media-status/$runId': typeof ApiPublicMediaStatusRunIdRoute
   '/api/public/media/$runId/$index': typeof ApiPublicMediaRunIdIndexRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/api/public/geo': typeof ApiPublicGeoRoute
   '/api/public/reminders-tick': typeof ApiPublicRemindersTickRoute
   '/api/public/telegram-keys': typeof ApiPublicTelegramKeysRoute
+  '/api/subscription/status': typeof ApiSubscriptionStatusRoute
   '/api/public/agent-tools/$token': typeof ApiPublicAgentToolsTokenRoute
   '/api/public/media-status/$runId': typeof ApiPublicMediaStatusRunIdRoute
   '/api/public/media/$runId/$index': typeof ApiPublicMediaRunIdIndexRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/api/public/geo': typeof ApiPublicGeoRoute
   '/api/public/reminders-tick': typeof ApiPublicRemindersTickRoute
   '/api/public/telegram-keys': typeof ApiPublicTelegramKeysRoute
+  '/api/subscription/status': typeof ApiSubscriptionStatusRoute
   '/api/public/agent-tools/$token': typeof ApiPublicAgentToolsTokenRoute
   '/api/public/media-status/$runId': typeof ApiPublicMediaStatusRunIdRoute
   '/api/public/media/$runId/$index': typeof ApiPublicMediaRunIdIndexRoute
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/api/public/geo'
     | '/api/public/reminders-tick'
     | '/api/public/telegram-keys'
+    | '/api/subscription/status'
     | '/api/public/agent-tools/$token'
     | '/api/public/media-status/$runId'
     | '/api/public/media/$runId/$index'
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/api/public/geo'
     | '/api/public/reminders-tick'
     | '/api/public/telegram-keys'
+    | '/api/subscription/status'
     | '/api/public/agent-tools/$token'
     | '/api/public/media-status/$runId'
     | '/api/public/media/$runId/$index'
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/api/public/geo'
     | '/api/public/reminders-tick'
     | '/api/public/telegram-keys'
+    | '/api/subscription/status'
     | '/api/public/agent-tools/$token'
     | '/api/public/media-status/$runId'
     | '/api/public/media/$runId/$index'
@@ -301,6 +313,7 @@ export interface RootRouteChildren {
   ApiPublicGeoRoute: typeof ApiPublicGeoRoute
   ApiPublicRemindersTickRoute: typeof ApiPublicRemindersTickRoute
   ApiPublicTelegramKeysRoute: typeof ApiPublicTelegramKeysRoute
+  ApiSubscriptionStatusRoute: typeof ApiSubscriptionStatusRoute
   ApiPublicAgentToolsTokenRoute: typeof ApiPublicAgentToolsTokenRoute
   ApiPublicMediaStatusRunIdRoute: typeof ApiPublicMediaStatusRunIdRoute
   ApiPublicMediaRunIdIndexRoute: typeof ApiPublicMediaRunIdIndexRoute
@@ -434,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTelegramKeysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/subscription/status': {
+      id: '/api/subscription/status'
+      path: '/api/subscription/status'
+      fullPath: '/api/subscription/status'
+      preLoaderRoute: typeof ApiSubscriptionStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/agent-tools/$token': {
       id: '/api/public/agent-tools/$token'
       path: '/api/public/agent-tools/$token'
@@ -477,6 +497,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicGeoRoute: ApiPublicGeoRoute,
   ApiPublicRemindersTickRoute: ApiPublicRemindersTickRoute,
   ApiPublicTelegramKeysRoute: ApiPublicTelegramKeysRoute,
+  ApiSubscriptionStatusRoute: ApiSubscriptionStatusRoute,
   ApiPublicAgentToolsTokenRoute: ApiPublicAgentToolsTokenRoute,
   ApiPublicMediaStatusRunIdRoute: ApiPublicMediaStatusRunIdRoute,
   ApiPublicMediaRunIdIndexRoute: ApiPublicMediaRunIdIndexRoute,
