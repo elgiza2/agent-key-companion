@@ -324,6 +324,14 @@ export async function streamChat({
   // the request so connected apps and MCP tools are still preserved.
   let hasConnectedTools = false;
   const rosterContext = readAgentRosterContext();
+  // Saved memory + (for "do you remember…" questions) earlier conversations.
+  const lastUserText = (() => {
+    const m = [...(messages as any[])].reverse().find((x) => x?.role === "user");
+    return typeof m?.content === "string" ? m.content : "";
+  })();
+  const memoryContext = await import("@/lib/chat/memoryContext")
+    .then((m) => m.fetchMemoryBrief(lastUserText, conversation_id))
+    .catch(() => "");
 
   // Rescue: the full chat path can stall before it emits a single byte (heavy
   // build/task prompts). Rather than leaving the user on an endless
@@ -342,6 +350,7 @@ export async function streamChat({
         onReasoning,
         thinking: deepThinkingEnabled(),
         force: true,
+        memoryContext,
         routingContext: [
           `mode=${chatMode || "normal"}`,
           activeAgent ? `agent=${activeAgent}` : "",
@@ -387,6 +396,7 @@ export async function streamChat({
         force: shouldForceFastTurn(messages),
         thinking: deepThinkingEnabled() && !isTrivialTurn(messages),
         ...(isTrivialTurn(messages) ? { maxTokens: 700 } : {}),
+        memoryContext,
         routingContext: [
           `mode=${chatMode || "normal"}`,
           activeAgent ? `agent=${activeAgent}` : "",
@@ -468,6 +478,7 @@ export async function streamChat({
       customSystem =
         `${customSystem || ""}\n\n${buildDateBrief()}\n\n${CAPABILITIES_BRIEF}\n\n${SUPERVISOR_BRIEF}`.trim();
       if (turnCtxBrief) customSystem = `${customSystem}\n\n${turnCtxBrief}`.trim();
+      if (memoryContext) customSystem = `${customSystem}\n\n${memoryContext}`.trim();
       if (chatMode !== "images" && chatMode !== "video") {
         const { chatModelPreferenceHint } = await import("@/lib/chatModelPreferences");
         const preferenceHint = chatModelPreferenceHint();

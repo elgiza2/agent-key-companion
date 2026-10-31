@@ -77,6 +77,7 @@ export async function tryFastChat({
   thinking,
   maxTokens,
   routingContext,
+  memoryContext,
 }: {
   messages: FastMsg[];
   authToken: string;
@@ -95,6 +96,8 @@ export async function tryFastChat({
   maxTokens?: number;
   /** Non-secret service context used by the fast agent's router. */
   routingContext?: string;
+  /** Saved user memory / earlier-conversation brief for this turn. */
+  memoryContext?: string;
 }): Promise<FastChatOutcome> {
   let resp: Response;
   // Only the user's Stop action cancels generation; provider startup and
@@ -108,6 +111,7 @@ export async function tryFastChat({
     thinking: thinking === true,
     ...(requestedMaxTokens ? { maxTokens: requestedMaxTokens } : {}),
     ...(routingContext ? { routingContext } : {}),
+    ...(memoryContext ? { customSystem: memoryContext } : {}),
   });
   /** Fallback runtime: this app's own serverless chat endpoint. */
   const viaProxy = () =>
@@ -149,6 +153,7 @@ export async function tryFastChat({
           messages,
           thinking: thinking === true,
           ...(routingContext ? { routingContext } : {}),
+          ...(memoryContext ? { customSystem: memoryContext } : {}),
           ...(force ? { force: true } : {}),
           ...(requestedMaxTokens ? { maxTokens: requestedMaxTokens } : {}),
         }),
