@@ -153,6 +153,6 @@
 - [ ] Live computer screen for the chat agent: the agent's own cloud browser is not installed at the provider; changing its instructions lives in the server agent code that can't be edited here
 - [ ] Wrong photo on some cards (Hacker News showed an unrelated person)
 
-- [ ] Chat recall: answer questions about past chats / saved memory
-- [ ] Remove follow-up suggestions shown under chat widgets/drawings
-- [ ] Fix image and video generation in chat
+- [x] Chat recall: answer questions about past chats / saved memory
+- [x] Remove follow-up suggestions shown under chat widgets/drawings
+- [x] Fix image and video generation in chat
