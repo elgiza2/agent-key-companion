@@ -140,7 +140,9 @@ const ChatMessageItemImpl = ({
   const isLast = i === lastMessageIdx;
   const isLastAssistant = isLast && msg.role === "assistant";
   const hasRunningTool = !msg.agentSkyState && !!msg.toolParts?.some((part) => part.state === "running");
-  const isStreamingThis = (isLoading && isLastAssistant) || hasRunningTool;
+  // A media card drives its own progress; treating it as a text stream hid the
+  // card (and so never started generation) while the composer showed "busy".
+  const isStreamingThis = !msg.mediaPlan && ((isLoading && isLastAssistant) || hasRunningTool);
   // While media is generating we show a single skeleton tile — the thinking
   // bubble is suppressed so the user never sees two stacked loading boxes.
   const showMediaSkeleton =
