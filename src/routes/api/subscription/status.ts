@@ -77,20 +77,17 @@ export const Route = createFileRoute("/api/subscription/status")({
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { data, error } = await supabaseAdmin.rpc("is_subscribed_by_email", {
+          
+          const { data, error } = await supabaseAdmin.rpc("get_user_campaign_info", {
             p_email: email,
           });
 
           if (error) {
-            console.error("[subscription-status] lookup failed", { code: error.code ?? "unknown" });
+            console.error("[subscription-status] lookup failed", { code: error.code ?? "unknown", message: error.message });
             return json({ error: "lookup_unavailable" }, 503);
           }
 
-          const isSubscribed = data === true;
-          return json({
-            status: isSubscribed ? "subscribed" : "free",
-            isSubscribed,
-          });
+          return json(data);
         } catch (error) {
           console.error("[subscription-status] handler unavailable", {
             name: error instanceof Error ? error.name : "unknown",
