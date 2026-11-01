@@ -642,11 +642,22 @@ async function runMediaOnGateway(
           duration: seconds,
           resolution: "720P",
         };
-  return await gateway<any>("/run", {
+  const init: RequestInit = {
     method: "POST",
     headers: { "Idempotency-Key": `${kind}-${uid}-${idempotencyKey}`.slice(0, 120) },
     body: JSON.stringify({ provider: model.provider, endpoint: model.endpoint, input }),
-  });
+  };
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      return await gateway<any>("/run", init);
+    } catch (error) {
+      const transient =
+        error instanceof ProviderError ? error.status >= 500 : error instanceof TypeError;
+      if (!transient || attempt === 2) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 500 * (attempt + 1)));
+    }
+  }
+  throw new ProviderError(502, "media_submit_failed", "Media provider is temporarily unavailable.");
 }
 async function readRun(runId: string) {
   return gateway<any>(`/runs/${encodeURIComponent(runId)}`);

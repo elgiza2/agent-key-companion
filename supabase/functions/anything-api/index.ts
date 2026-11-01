@@ -82,30 +82,55 @@ const json = (body: unknown, status = 200) =>
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 
-async function resolveApiKey(admin: any): Promise<string | null> {
-  const service = "deapi";
+async function resolveApiKeys(admin: any): Promise<string[]> {
+  const keys: string[] = [];
+  const seen = new Set<string>();
+  const add = (value: unknown) => {
+    const key = typeof value === "string" ? value.trim() : "";
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      keys.push(key);
+    }
+  };
+
   try {
-    const vault = await vaultKeys(service);
-    if (vault.length) return vault[0].key;
+    for (const row of await vaultKeys("deapi")) add(row.key);
   } catch {
-    /* fall through */
+    /* continue through configured server-side fallbacks */
   }
-  const envKey = Deno.env.get("DEAPI_API_KEY")?.trim();
-  if (envKey) return envKey;
+  add(Deno.env.get("DEAPI_API_KEY"));
   try {
     const { data } = await admin.rpc("next_provider_key", { p_provider: "d" });
     const row = Array.isArray(data) ? data[0] : data;
-    if ((row as any)?.api_key) return String((row as any).api_key);
+    add((row as any)?.api_key);
   } catch {
-    /* fall through */
+    /* continue through configured server-side fallbacks */
   }
   try {
     const { data } = await admin.rpc("get_image_provider_key", { p_provider: "d" });
-    if (data) return data as string;
+    add(data);
   } catch {
-    /* fall through */
+    /* no remaining source */
   }
-  return null;
+  return keys;
+}
+
+function isKeyRejection(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return /\bdeapi\s+(401|402|403|429)\b/i.test(message);
+}
+
+async function withKeyRotation<T>(keys: string[], run: (key: string) => Promise<T>): Promise<T> {
+  let lastError: unknown = null;
+  for (const key of keys) {
+    try {
+      return await run(key);
+    } catch (error) {
+      lastError = error;
+      if (!isKeyRejection(error)) throw error;
+    }
+  }
+  throw lastError ?? new Error("deAPI service is not configured");
 }
 
 function firstUrl(value: unknown, depth = 0): string | null {
@@ -378,13 +403,27 @@ async function pollVideoJob(
   jobId: string,
 ): Promise<Response> {
   const id = jobId.replace(/^deapi:/, "");
-  const key = await resolveApiKey(admin);
-  if (!key) return json({ status: "failed", error: "video service is not configured" });
-  const st = await fetch(`https://api.deapi.ai/api/v2/jobs/${id}`, {
-    headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
-  });
-  if (!st.ok) return json({ status: "processing" });
-  const job: any = await st.json().catch(() => null);
+  const keys = await resolveApiKeys(admin);
+  if (!keys.length) return json({ status: "failed", error: "video service is not configured" });
+  let job: any = null;
+  for (const key of keys) {
+    try {
+      const st = await fetch(`https://api.deapi.ai/api/v2/jobs/${id}`, {
+        headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
+      });
+      if ([401, 402, 403, 404].includes(st.status)) continue;
+      if (!st.ok) return json({ status: "processing" });
+      job = await st.json().catch(() => null);
+      break;
+    } catch {
+      continue;
+    }
+  }
+  if (!job)
+    return json({
+      status: "failed",
+      error: "Could not access the video job with the available provider keys.",
+    });
   const status = String(job?.data?.status ?? job?.status ?? "").toLowerCase();
   if (["done", "completed", "complete", "succeeded", "success"].includes(status)) {
     const url = firstVideoUrl(job) ?? job?.data?.result_url ?? null;
@@ -426,19 +465,26 @@ async function handleVideo(
   }
 
   try {
-    const key = await resolveApiKey(admin);
-    if (!key) throw new Error("video service is not configured");
-    const id = await deapiVideoSubmit({
-      key,
-      model: cfg.api,
-      prompt,
-      steps: cfg.steps,
-      fps: cfg.fps,
-      duration,
-      aspectRatio,
-      image: startFrame,
+    const keys = await resolveApiKeys(admin);
+    if (!keys.length) return json({ error: true, message: "video service is not configured" }, 503);
+    const id = await withKeyRotation(keys, (key) =>
+      deapiVideoSubmit({
+        key,
+        model: cfg.api,
+        prompt,
+        steps: cfg.steps,
+        fps: cfg.fps,
+        duration,
+        aspectRatio,
+        image: startFrame,
+      }),
+    );
+    return json({
+      job_id: `deapi:${id}`,
+      provider: "megsy",
+      model_slug: slug,
+      model_name: "Megsy Video",
     });
-    return json({ job_id: `deapi:${id}`, provider: "megsy", model_slug: slug, model_name: "Megsy Video" });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "video generation failed";
     return json({ error: true, message: msg }, 502);
@@ -915,20 +961,22 @@ Deno.serve(async (req) => {
     );
 
     try {
-      const key = await resolveApiKey(admin);
-      if (!key) throw new Error("image service is not configured");
+      const keys = await resolveApiKeys(admin);
+      if (!keys.length) throw new Error("image service is not configured");
       let done: { url: string; slug: string } | null = null;
       let lastErr: unknown = null;
       for (const attemptSlug of attempts) {
         try {
-          const url = await deapiGenerate({
-            key,
-            model: DEAPI_MODELS[attemptSlug].api,
-            prompt,
-            images,
-            aspectRatio,
-            steps: DEAPI_MODELS[attemptSlug].steps,
-          });
+          const url = await withKeyRotation(keys, (key) =>
+            deapiGenerate({
+              key,
+              model: DEAPI_MODELS[attemptSlug].api,
+              prompt,
+              images,
+              aspectRatio,
+              steps: DEAPI_MODELS[attemptSlug].steps,
+            }),
+          );
           done = { url, slug: attemptSlug };
           break;
         } catch (err) {
@@ -962,7 +1010,10 @@ Deno.serve(async (req) => {
           .eq("user_id", userId);
       }
       const msg = e instanceof Error ? e.message : "image generation failed";
-      return json({ error: true, message: msg }, 502);
+      return json(
+        { error: true, message: msg },
+        /service is not configured/i.test(msg) ? 503 : 502,
+      );
     }
   } catch (e) {
     const msg = e instanceof Error ? e.message : "unexpected error";

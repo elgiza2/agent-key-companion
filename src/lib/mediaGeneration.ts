@@ -56,20 +56,38 @@ async function generateViaAgentSky(
     const run = await agentApi.media({
       kind,
       prompt: scene.prompt,
-      aspect: normalizeAspect(kind, (kind === "video" ? scene.aspect_ratio : undefined) || aspectRatio),
+      aspect: normalizeAspect(
+        kind,
+        (kind === "video" ? scene.aspect_ratio : undefined) || aspectRatio,
+      ),
       duration: kind === "video" ? scene.duration_seconds || 5 : undefined,
       idempotencyKey: crypto.randomUUID(),
     });
     const started = Date.now();
+    let consecutivePollErrors = 0;
     while (Date.now() - started < 15 * 60_000) {
       await new Promise((r) => setTimeout(r, kind === "video" ? 5000 : 2500));
       const st = await mediaStatus(run.runId, run.token).catch(() => null);
-      if (!st) continue;
+      if (!st) {
+        consecutivePollErrors++;
+        if (consecutivePollErrors >= 3)
+          throw new Error(`Could not check ${kind} generation status.`);
+        continue;
+      }
+      if (/FAIL|ERROR|CANCEL/i.test(st.status || "")) throw new Error(st.error || `${kind} failed`);
+      if (st.error) {
+        consecutivePollErrors++;
+        if (consecutivePollErrors >= 3) throw new Error(st.error);
+        continue;
+      }
+      consecutivePollErrors = 0;
       if (st.urls?.length) {
         onPartial?.(scene.index, kind === "image" ? st.urls[0] : "", 1);
         return st.urls[0];
       }
-      if (/FAIL|ERROR|CANCEL/i.test(st.status || "")) throw new Error(st.error || `${kind} failed`);
+      if (/COMPLETE|SUCCEED|DONE/i.test(st.status || "")) {
+        throw new Error(`${kind} completed without a media URL.`);
+      }
     }
     throw new Error("timeout");
   } finally {
@@ -150,7 +168,11 @@ async function generateFreeVideo(
     if (!poll) continue;
     const reported = Number(poll.progress ?? NaN);
     if (Number.isFinite(reported) && reported > 0) {
-      onPartial?.(scene.index, "", reported > 1 ? Math.min(0.95, reported / 100) : Math.min(0.95, reported));
+      onPartial?.(
+        scene.index,
+        "",
+        reported > 1 ? Math.min(0.95, reported / 100) : Math.min(0.95, reported),
+      );
     }
     if (poll.status === "completed" && poll.video_url) {
       onPartial?.(scene.index, "", 1);
@@ -161,10 +183,16 @@ async function generateFreeVideo(
   throw new Error("timeout");
 }
 
-/** Agent Sky answers 402 for accounts without a subscription. */
+/** Only a plan gate should use the free path; credit failures must stay blocked. */
 export function needsFreeTier(e: unknown): boolean {
-  if ((e as any)?.status === 402) return true;
-  return /upgrade|pro plan|\b402\b/i.test(e instanceof Error ? e.message : String(e));
+  const code =
+    typeof e === "object" && e !== null && "code" in e
+      ? String((e as { code?: unknown }).code ?? "").toLowerCase()
+      : "";
+  if (["insufficient_credits", "billing_required", "not_configured"].includes(code)) return false;
+  if (code === "upgrade_required") return true;
+  const message = e instanceof Error ? e.message : String(e);
+  return /upgrade_required|images and video are available on the pro plan/i.test(message);
 }
 
 async function generateImageScene(
